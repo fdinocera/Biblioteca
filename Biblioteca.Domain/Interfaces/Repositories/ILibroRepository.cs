@@ -12,10 +12,10 @@ namespace Biblioteca.Domain.Interfaces.Repositories
     public interface ILibroRepository
     {
         Task<Libro?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Libro>> GetAllSync();
+        Task<IEnumerable<Libro>> GetAllAsync();
         Task AddAsync(Libro libro);
         void Update(Libro libro);
         void Remove(Libro libro);
-        Task<bool> ExistsAsync(Isbn isbn);
+        Task<bool> ExistsAsync(string isbn);
     }
 }

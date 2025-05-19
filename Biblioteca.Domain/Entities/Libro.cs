@@ -9,18 +9,28 @@ namespace Biblioteca.Domain.Entities
 {
     public class Libro
     {
-        public Guid Id { get; private set; }= Guid.NewGuid();
+        public Guid Id { get; private set; } = Guid.NewGuid();
         public string Titolo { get; private set; }
-        public Isbn Isbn { get; private set; }
+        public string Isbn { get; private set; }
         public bool Disponibile { get; private set; } = true;
 
-        public Libro(string titolo, Isbn isbn) { 
+
+        public Libro() { }
+
+        public Libro(string titolo, string isbn)
+        {
+            if (string.IsNullOrWhiteSpace(titolo))
+                throw new ArgumentException("Il titolo non puo essere vuoto", nameof(titolo));
+
+            if (string.IsNullOrWhiteSpace(isbn))
+                throw new ArgumentException("L'isbn non puo essere vuoto", nameof(isbn));
+
             Titolo = titolo;
             Isbn = isbn;
         }
 
         public void SegnaComeNonDisponibile() => Disponibile = false;
-        public void SegnaComeDisponibile()=>Disponibile = true;
+        public void SegnaComeDisponibile() => Disponibile = true;
 
     }
 }

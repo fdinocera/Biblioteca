@@ -10,10 +10,10 @@ namespace Biblioteca.Domain.Entities
     public class Utente
     {
         public Guid Id { get; private set; }= Guid.NewGuid();
-        public NomeCompleto Nome { get; private set; }
-        public Email Email { get; private set; }
+        public string Nome { get; private set; }
+        public string Email { get; private set; }
         
-        public Utente(NomeCompleto nome, Email email) {
+        public Utente(string nome, string email) {
             Nome = nome;
             Email = email;        
         }

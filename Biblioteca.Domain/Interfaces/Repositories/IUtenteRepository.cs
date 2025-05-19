@@ -12,9 +12,9 @@ namespace Biblioteca.Domain.Interfaces.Repositories
     {
         Task<Utente?> GetByIdAsync(Guid guid);
         Task<IEnumerable<Utente>> GetAllAsync();
-        Task<Utente> AddAsync(Utente utente);
+        Task AddAsync(Utente utente);
         void Remove(Utente utente);
         void Update(Utente utente);
-        Task<bool> ExistsAsync(Email email);
+        Task<bool> ExistsAsync(string email);
     }
 }
