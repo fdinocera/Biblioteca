@@ -14,23 +14,49 @@ namespace Biblioteca.UI.Forms
     public partial class MainForm : Form
     {
         private readonly LibroService _libroService;
+        private readonly UtenteService _utenteService;
+        private readonly PrestitoService _prestitoService;
 
-        public MainForm(LibroService libroService)
+        public MainForm(LibroService libroService, UtenteService utenteService, PrestitoService prestitoService)
         {
             InitializeComponent();
             _libroService = libroService;
-
+            _utenteService = utenteService;
+            _prestitoService = prestitoService;
         }
 
-        private void CaricaLibri()
+        private async void CaricaLibri()
         {
-            var libri = _libroService.ElencaLibriAsync();
+            var libri = await _libroService.ElencaLibriAsync();
             dataGridView1.DataSource = libri;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             CaricaLibri();
+        }
+
+        private void btn_AggiungiLibro_Click(object sender, EventArgs e)
+        {
+            var libriForm = new LibriForm(_libroService);
+            libriForm.ShowDialog();
+        }
+
+        private void btn_AggiungiUtente_Click(object sender, EventArgs e)
+        {
+            var utentiForm = new UtentiForm(_utenteService);
+            utentiForm.ShowDialog();
+        }
+
+        private void btn_AggiungiPrestito_Click(object sender, EventArgs e)
+        {
+            var prestitoForm = new PrestitoForm(_prestitoService);
+            prestitoForm.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

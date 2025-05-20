@@ -21,11 +21,11 @@ namespace Biblioteca.Infrastructure.Repositories
 
         public async Task AddAsync(Prestito prestito) => await _context.AddAsync(prestito);
 
-        public async Task<IEnumerable<Prestito>> GetByLibroIdAsync(Guid libroId) =>
-            await _context.Prestiti.Where(p => p.LibroId == libroId).ToListAsync();
+        public async Task<IEnumerable<Prestito>> GetByLibroIdAsync(string isbn) =>
+            await _context.Prestiti.Where(p => p.Isbn == isbn).ToListAsync();
 
-        public async Task<IEnumerable<Prestito>> GetByUtenteIdAsync(Guid utenteId) =>
-            await _context.Prestiti.Where(p => p.UtenteId == utenteId).ToListAsync();
+        public async Task<IEnumerable<Prestito>> GetByUtenteIdAsync(string email) =>
+            await _context.Prestiti.Where(p => p.Email == email).ToListAsync();
 
         public async Task<Prestito> GetByIdAsync(Guid id) =>
             await _context.Prestiti.FindAsync(id);

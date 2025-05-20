@@ -10,6 +10,7 @@ namespace Biblioteca.Application.DTOs
     {
         public Guid Id { get; set; }
         public string Titolo { get; set; }
+        public string Autore {  get; set; } 
         public string Isbn { get; set; }
         public bool Disponibile { get; set; }
     }

@@ -36,6 +36,8 @@ namespace Biblioteca
 
                     // Casi d’uso
                     services.AddScoped<LibroService>();
+                    services.AddScoped<UtenteService>();
+                    services.AddScoped<PrestitoService>();
 
                     // Forms
                     services.AddScoped<MainForm>();

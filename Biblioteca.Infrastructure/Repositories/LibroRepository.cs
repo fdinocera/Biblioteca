@@ -21,6 +21,8 @@ namespace Biblioteca.Infrastructure.Repositories
         }
 
         public async Task AddAsync(Libro libro) => await _context.Libri.AddAsync(libro);
+                
+        public async Task<Libro?> GetByISBNAsync(string isbn)=> await _context.Libri.FirstOrDefaultAsync(l => l.Isbn == isbn);
 
         public async Task<IEnumerable<Libro>> GetAllAsync() => await _context.Libri.ToListAsync();
 
@@ -30,6 +32,6 @@ namespace Biblioteca.Infrastructure.Repositories
 
         public void Update(Libro libro) => _context.Libri.Update(libro);
 
-        public Task<bool> ExistsAsync(string isbn) => _context.Libri.AnyAsync<Libro>(l => l.Isbn == isbn);
+        public Task<bool> ExistsAsync(string isbn) => _context.Libri.AnyAsync<Libro>(l => l.Isbn == isbn);        
     }
 }

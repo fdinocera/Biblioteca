@@ -12,11 +12,11 @@ using Biblioteca.Domain.Entities;
 
 namespace Biblioteca.Application.Services
 {
-    public class LibroService : IGestioneLibriService
+    public class LibroService : ILibroService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<LibroService> _logger;
-
+        
         public LibroService(IUnitOfWork unitOfWork, ILogger<LibroService> logger)
         {
             _unitOfWork = unitOfWork;
@@ -35,30 +35,48 @@ namespace Biblioteca.Application.Services
             }).ToList();
         }
 
-        public async Task AggiungiLibroAsync(string titolo, string isbn)
+        public async Task<bool> ExistsByIsbnAsync(string isbn)
         {
-            var libro = new Libro(titolo, isbn);
-            await _unitOfWork.Libri.AddAsync(libro);
-            await _unitOfWork.CommitAsync();
+            bool exists = await _unitOfWork.Libri.ExistsAsync(isbn);
 
+            if (exists) {
+                _logger.LogWarning($"Il libro con codice isbn {isbn} già esiste.");
+            }
+
+            return exists;            
         }
 
-        public async Task SegnaComeDisponibile(Guid id)
+        public async Task AggiungiLibroAsync(string titolo, string autore, string isbn)
         {
-            var libro= await _unitOfWork.Libri.GetByIdAsync(id);
-            if (libro == null) throw new Exception("Libro non trovato");
+
+            if (string.IsNullOrWhiteSpace(autore))
+                throw new AggregateException("L'autore è obbligatorio.");
+            
+            var libro = new Libro(titolo, autore, isbn);
+            await _unitOfWork.Libri.AddAsync(libro);            
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task SegnaComeDisponibileAsync(string isbn)
+        {
+            var libro = await _unitOfWork.Libri.GetByISBNAsync(isbn);
+            if (libro == null)
+            {
+                _logger.LogWarning($"Tentativo di aggiornare un libro non esistente: isbn {isbn}");
+                throw new Exception("Libro non trovato");
+            }
+
             libro.SegnaComeDisponibile();
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task SegnaComeNonDisponibile(Guid id)
+        public async Task SegnaComeNonDisponibileAsync(string isbn)
         {
-            var libro = await _unitOfWork.Libri.GetByIdAsync(id);
-            if (libro == null) throw new Exception("Libro non trovato");
+            var libro = await _unitOfWork.Libri.GetByISBNAsync(isbn);
+            if (libro == null) throw new Exception($"Libro con isbn {isbn} non trovato.");
+            
             libro.SegnaComeNonDisponibile();
             await _unitOfWork.CommitAsync();
         }
-
-        
     }
 }
